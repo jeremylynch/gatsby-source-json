@@ -1,8 +1,7 @@
 const axios = require('axios')
 
 async function fetch({
-  uri,
-  reporter
+  uri
 }) {
 
   let allRoutes

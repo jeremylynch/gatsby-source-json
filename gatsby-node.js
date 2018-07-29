@@ -4,13 +4,20 @@ const fetch = require(`./fetch`)
 
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
 
-exports.sourceNodes = async ({ boundActionCreators, store, cache }, {name, uri, reporter}) => {
-  const { createNode, createNodeField } = boundActionCreators;
+exports.sourceNodes = async ({
+  boundActionCreators,
+  store,
+  cache
+}, {
+  name,
+  uri
+}) => {
+  const { createNode } = boundActionCreators;
 
   // Create nodes here by downloading data
   // from a remote API.
   console.log("Fetching JSON Data")
-  let data = await fetch({uri, reporter})
+  let data = await fetch({uri})
   // Process data into nodes.
   for (const document of data) {
     // Add the file
