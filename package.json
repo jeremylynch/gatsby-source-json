@@ -1,0 +1,28 @@
+{
+  "name": "gatsby-source-json",
+  "version": "1.0.0",
+  "description": "Gatsby plugin to handle third party data and images.",
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "gatsby-source-plugin"
+  ],
+  "main": "gatsby-node.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeremylynch/gatsby-source-json.git"
+  },
+  "author": "Jeremy Lynch",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeremylynch/gatsby-source-json/issues"
+  },
+  "homepage": "https://github.com/jeremylynch/gatsby-source-json#readme",
+  "dependencies": {
+    "axios": "^0.18.0",
+    "nanoid": "^1.1.0"
+  }
+}
