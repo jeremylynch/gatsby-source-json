@@ -23,6 +23,9 @@
   "homepage": "https://github.com/jeremylynch/gatsby-source-json#readme",
   "dependencies": {
     "axios": "^0.18.0",
+    "chalk": "^2.4.1",
+    "crypto": "^1.0.1",
+    "gatsby-source-filesystem": "^1.5.39",
     "nanoid": "^1.1.0"
   }
 }

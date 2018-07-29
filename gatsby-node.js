@@ -1,18 +1,18 @@
-const axios = require('axios')
 const crypto = require('crypto');
 var nanoid = require('nanoid')
+const fetch = require(`./fetch`)
+
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
 
-exports.sourceNodes = async ({ boundActionCreators, store, cache }, {name, uri}) => {
+exports.sourceNodes = async ({ boundActionCreators, store, cache }, {name, uri, reporter}) => {
   const { createNode, createNodeField } = boundActionCreators;
 
   // Create nodes here by downloading data
   // from a remote API.
-  const data = await axios.get(uri);
-
+  console.log("Fetching JSON Data")
+  let data = await fetch({uri, reporter})
   // Process data into nodes.
-  for (const document of data.data) {
-
+  for (const document of data) {
     // Add the file
     const url = document.image.url
     let fileNode
@@ -46,5 +46,6 @@ exports.sourceNodes = async ({ boundActionCreators, store, cache }, {name, uri})
       console.warn('error creating node', error)
     }
   }
+  console.log("Finished JSON")
   return;
 };
