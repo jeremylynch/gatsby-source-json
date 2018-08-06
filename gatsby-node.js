@@ -4,13 +4,20 @@ const fetch = require(`./fetch`)
 
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
 
+function getDescendantProp(obj, desc) {
+  var arr = desc.split(".");
+  while(arr.length && (obj = obj[arr.shift()]));
+  return obj;
+}
+
 exports.sourceNodes = async ({
   boundActionCreators,
   store,
   cache
 }, {
   name,
-  uri
+  uri,
+  image_location = 'image.url'
 }) => {
   const { createNode } = boundActionCreators;
 
@@ -21,7 +28,8 @@ exports.sourceNodes = async ({
   // Process data into nodes.
   for (const document of data) {
     // Add the file
-    const url = document.image.url
+
+    const url = getDescendantProp(document, image_location)
     let fileNode
     try {
       fileNode = await createRemoteFileNode({
@@ -34,13 +42,16 @@ exports.sourceNodes = async ({
       console.warn('error creating node', error)
     }
 
+    let ids = []
+    if (fileNode) ids.push(fileNode.id)
+
     // Add the document
     try {
       await createNode({
         ...document,
         id: nanoid(),
         parent: null,
-        children: [fileNode.id],
+        children: ids,
         internal: {
           type: name,
           contentDigest: crypto
@@ -53,6 +64,6 @@ exports.sourceNodes = async ({
       console.warn('error creating node', error)
     }
   }
-  console.log("Finished JSON")
+  console.log("\nFinished JSON")
   return;
 };
