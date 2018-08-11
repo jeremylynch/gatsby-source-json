@@ -1,6 +1,7 @@
 const crypto = require('crypto');
 var nanoid = require('nanoid')
 const fetch = require(`./fetch`)
+const normalize = require(`./normalize`)
 
 const { createRemoteFileNode } = require(`gatsby-source-filesystem`)
 
@@ -16,42 +17,27 @@ exports.sourceNodes = async ({
   cache
 }, {
   name,
-  uri,
-  image_location = 'image.url'
+  uri
 }) => {
-  const { createNode } = boundActionCreators;
+  const { createNode, createParentChildLink } = boundActionCreators;
 
   // Create nodes here by downloading data
   // from a remote API.
   console.log("Fetching JSON Data")
   let data = await fetch({uri})
+
+  entities = normalize.standardizeKeys(data)
+
   // Process data into nodes.
-  for (const document of data) {
-    // Add the file
-
-    const url = getDescendantProp(document, image_location)
-    let fileNode
-    try {
-      fileNode = await createRemoteFileNode({
-        url: url,
-        store,
-        cache,
-        createNode
-      })
-    } catch (error) {
-      console.warn('error creating node', error)
-    }
-
-    let ids = []
-    if (fileNode) ids.push(fileNode.id)
-
+  for (const document of entities) {
     // Add the document
     try {
       await createNode({
         ...document,
         id: nanoid(),
         parent: null,
-        children: ids,
+        children: [],
+        mediaType: 'application/json',
         internal: {
           type: name,
           contentDigest: crypto
@@ -63,7 +49,31 @@ exports.sourceNodes = async ({
     } catch (error) {
       console.warn('error creating node', error)
     }
+
   }
+
   console.log("\nFinished JSON")
   return;
 };
+
+exports.onCreateNode = async ({ node, boundActionCreators, store, cache }, {image_location = 'image.url'}) => {
+  // if (node.internal.type !== "DogImage") {
+  //   return
+  // }
+
+  const url = getDescendantProp(node, image_location)
+
+  const { createNode } = boundActionCreators
+
+  const fileNode = await createRemoteFileNode({
+    url: url,
+    store,
+    cache,
+    createNode,
+    createNodeId: `image-sharp-${nanoid()}`,
+  })
+
+  if (fileNode) {
+    node.image___NODE = fileNode.id
+  }
+}
