@@ -25,7 +25,8 @@
   "dependencies": {
     "axios": "^0.18.0",
     "deep-map-keys": "^1.2.0",
-    "gatsby-source-filesystem": "^1.5.39",
-    "nanoid": "^1.2.0"
+    "gatsby": "^2.0.18",
+    "gatsby-source-filesystem": "^2.0.0",
+    "nanoid": "^1.2.6"
   }
 }
