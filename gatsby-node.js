@@ -12,14 +12,14 @@ function getDescendantProp(obj, desc) {
 }
 
 exports.sourceNodes = async ({
-  boundActionCreators,
+  actions,
   store,
   cache
 }, {
   name,
   uri
 }) => {
-  const { createNode, createParentChildLink } = boundActionCreators;
+  const { createNode } = actions;
 
   // Create nodes here by downloading data
   // from a remote API.
@@ -56,24 +56,36 @@ exports.sourceNodes = async ({
   return;
 };
 
-exports.onCreateNode = async ({ node, boundActionCreators, store, cache }, {image_location = 'image.url'}) => {
-  // if (node.internal.type !== "DogImage") {
-  //   return
-  // }
+exports.onCreateNode = async ({
+  node,
+  store,
+  cache,
+  actions,
+  createNodeId
+}, {
+  image_location = 'image.url',
+  name
+}) => {
+  const { createNode } = actions
+  if (node.internal.type === name) {
+    let fileNode
 
-  const url = getDescendantProp(node, image_location)
+    const url = getDescendantProp(node, image_location)
 
-  const { createNode } = boundActionCreators
+    try {
+      fileNode = await createRemoteFileNode({
+        url: url,
+        store,
+        cache,
+        createNode,
+        createNodeId,
+      })
+    } catch (e) {
+      console.warn('error', e)
+    }
 
-  const fileNode = await createRemoteFileNode({
-    url: url,
-    store,
-    cache,
-    createNode,
-    createNodeId: `image-sharp-${nanoid()}`,
-  })
-
-  if (fileNode) {
-    node.image___NODE = fileNode.id
+    if (fileNode) {
+      node.image___NODE = fileNode.id
+    }
   }
 }
