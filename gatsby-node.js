@@ -17,14 +17,15 @@ exports.sourceNodes = async ({
   cache
 }, {
   name,
-  uri
+  uri,
+  auth
 }) => {
   const { createNode } = actions;
 
   // Create nodes here by downloading data
   // from a remote API.
   console.log("Fetching JSON Data")
-  let data = await fetch({uri})
+  let data = await fetch({uri, auth})
 
   entities = normalize.standardizeKeys(data)
 
