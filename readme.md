@@ -1,4 +1,4 @@
-Pull data from a JSON API endpoint and turn into gatsby nodes
+Pull data from a JSON API endpoint and turn into Gatsby nodes
 
 #### Install
 ```
@@ -19,8 +19,8 @@ plugins: [
       username: 'userename',
       password: 'password'
     },
-    // image location to process images
-    image_location: image_location,
+    // image location to process images. Default: "image.url"
+    image_location: "image.url",
   }
 ]
 ```
