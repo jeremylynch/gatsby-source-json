@@ -1,4 +1,4 @@
-Pull data from a JSON API endpoint into graphql
+Pull data from a JSON API endpoint and turn into gatsby nodes
 
 #### Install
 ```
@@ -10,12 +10,15 @@ npm i gatsby-source-json
 plugins: [
   resolve: 'gatsby-source-json',
   options: {
-    // name of data to add to graphql
-    name: name,
+    // name the gatsby node
+    name: 'Articles',
     // url for JSON endpoint
-    uri: `${api_base}${url}`,
+    uri: 'www.example.com/example.json',
     // Basic Auth if required (optional)
-    auth: auth,
+    auth: {
+      username: 'userename',
+      password: 'password'
+    },
     // image location to process images
     image_location: image_location,
   }
